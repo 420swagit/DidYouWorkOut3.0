@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Did You Work Out 3.0</string>
 
-    <string name="title">Student Details</string>
-
-    <string name="roll_no">Enter Rollno: </string>
+    <string name="title">Workout Routines</string>
 
     <string name="name">Enter Name: </string>
 
-    <string name="marks">Enter Marks: </string>
+    <string name="description">Enter Description: </string>
+
+    <string name="quantity">Enter Quantity: </string>
 
     <string name="add">Add</string>
 

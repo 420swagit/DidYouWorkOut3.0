@@ -44,34 +44,32 @@ public class MainActivity extends Activity implements OnClickListener
     {
         if(view==btnAdd)
         {
-            if(editRollno.getText().toString().trim().length()==0||
-                    editName.getText().toString().trim().length()==0||
-                    editMarks.getText().toString().trim().length()==0)
+            if(editRollno.getText().toString().trim().length()==0|| editName.getText().toString().trim().length()==0|| editMarks.getText().toString().trim().length()==0)
             {
                 showMessage("Error", "Please enter all values");
                 return;
             }
             db.execSQL("INSERT INTO student VALUES('"+editRollno.getText()+"','"+editName.getText()+
                     "','"+editMarks.getText()+"');");
-            showMessage("Success", "Record added");
+            showMessage("Success", "Excercise added");
             clearText();
         }
         if(view==btnDelete)
         {
             if(editRollno.getText().toString().trim().length()==0)
             {
-                showMessage("Error", "Please enter Rollno");
+                showMessage("Error", "Please enter workout name");
                 return;
             }
             Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+editRollno.getText()+"'", null);
             if(c.moveToFirst())
             {
                 db.execSQL("DELETE FROM student WHERE rollno='"+editRollno.getText()+"'");
-                showMessage("Success", "Record Deleted");
+                showMessage("Success", "Excercise Deleted");
             }
             else
             {
-                showMessage("Error", "Invalid Rollno");
+                showMessage("Error", "Invalid Name");
             }
             clearText();
         }
@@ -87,7 +85,7 @@ public class MainActivity extends Activity implements OnClickListener
             {
                 db.execSQL("UPDATE student SET name='"+editName.getText()+"',marks='"+editMarks.getText()+
                         "' WHERE rollno='"+editRollno.getText()+"'");
-                showMessage("Success", "Record Modified");
+                showMessage("Success", "Workout Modified");
             }
             else
             {
@@ -125,11 +123,11 @@ public class MainActivity extends Activity implements OnClickListener
             StringBuffer buffer=new StringBuffer();
             while(c.moveToNext())
             {
-                buffer.append("Rollno: "+c.getString(0)+"\n");
-                buffer.append("Name: "+c.getString(1)+"\n");
-                buffer.append("Marks: "+c.getString(2)+"\n\n");
+                buffer.append("Excercise Name: "+c.getString(0)+"\n");
+                buffer.append("Excercise Description: "+c.getString(1)+"\n");
+                buffer.append("Excercise Quantity: "+c.getString(2)+"\n\n");
             }
-            showMessage("Student Details", buffer.toString());
+            showMessage("Excercise Details", buffer.toString());
         }
         if(view==btnShowInfo)
         {
