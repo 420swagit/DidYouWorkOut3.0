@@ -77,7 +77,7 @@ public class MainActivity extends Activity implements OnClickListener
         {
             if(editRollno.getText().toString().trim().length()==0)
             {
-                showMessage("Error", "Please enter Rollno");
+                showMessage("Error", "Please enter exercise name");
                 return;
             }
             Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+editRollno.getText()+"'", null);
@@ -97,7 +97,7 @@ public class MainActivity extends Activity implements OnClickListener
         {
             if(editRollno.getText().toString().trim().length()==0)
             {
-                showMessage("Error", "Please enter Rollno");
+                showMessage("Error", "Please enter exercise name");
                 return;
             }
             Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+editRollno.getText()+"'", null);
@@ -131,7 +131,7 @@ public class MainActivity extends Activity implements OnClickListener
         }
         if(view==btnShowInfo)
         {
-            showMessage("Student Management Application", "Developed By Azim");
+            showMessage("FAGGOT", "NIGGER");
         }
     }
     public void showMessage(String title,String message)
