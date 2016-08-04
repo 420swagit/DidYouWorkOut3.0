@@ -131,7 +131,7 @@ public class MainActivity extends Activity implements OnClickListener
         }
         if(view==btnShowInfo)
         {
-            showMessage("FAGGOT", "NIGGER");
+            showMessage("App", "data");
         }
     }
     public void showMessage(String title,String message)
