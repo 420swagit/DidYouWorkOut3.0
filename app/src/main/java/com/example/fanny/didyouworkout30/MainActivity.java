@@ -22,7 +22,7 @@ public class MainActivity extends Activity implements OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        editName=(EditText)findViewById(R.id.editRollno);
+        editName=(EditText)findViewById(R.id.editName);
         editQuantity=(EditText)findViewById(R.id.editName);
         editDescription=(EditText)findViewById(R.id.editMarks);
         btnAdd=(Button)findViewById(R.id.btnAdd);
@@ -37,8 +37,8 @@ public class MainActivity extends Activity implements OnClickListener
         btnView.setOnClickListener(this);
         btnViewAll.setOnClickListener(this);
         btnShowInfo.setOnClickListener(this);
-        db=openOrCreateDatabase("StudentDB", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS student(rollno VARCHAR,name VARCHAR,marks VARCHAR);");
+        db=openOrCreateDatabase("workoutDB", Context.MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS workout(name VARCHAR,quantity VARCHAR,description VARCHAR);");
     }
     public void onClick(View view)
     {
@@ -51,7 +51,7 @@ public class MainActivity extends Activity implements OnClickListener
                 showMessage("Error", "Please enter all values");
                 return;
             }
-            db.execSQL("INSERT INTO student VALUES('"+editName.getText()+"','"+editQuantity.getText()+
+            db.execSQL("INSERT INTO workout VALUES('"+editName.getText()+"','"+editQuantity.getText()+
                     "','"+editDescription.getText()+"');");
             showMessage("Success", "Record added");
             clearText();
@@ -60,18 +60,18 @@ public class MainActivity extends Activity implements OnClickListener
         {
             if(editName.getText().toString().trim().length()==0)
             {
-                showMessage("Error", "Please enter Rollno");
+                showMessage("Error", "Please enter name");
                 return;
             }
-            Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+editName.getText()+"'", null);
+            Cursor c=db.rawQuery("SELECT * FROM workout WHERE name='"+editName.getText()+"'", null);
             if(c.moveToFirst())
             {
-                db.execSQL("DELETE FROM student WHERE rollno='"+editName.getText()+"'");
+                db.execSQL("DELETE FROM workout WHERE name='"+editName.getText()+"'");
                 showMessage("Success", "Record Deleted");
             }
             else
             {
-                showMessage("Error", "Invalid Rollno");
+                showMessage("Error", "Invalid name");
             }
             clearText();
         }
@@ -79,19 +79,19 @@ public class MainActivity extends Activity implements OnClickListener
         {
             if(editName.getText().toString().trim().length()==0)
             {
-                showMessage("Error", "Please enter Rollno");
+                showMessage("Error", "Please enter name");
                 return;
             }
-            Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+editName.getText()+"'", null);
+            Cursor c=db.rawQuery("SELECT * FROM workout WHERE name='"+editName.getText()+"'", null);
             if(c.moveToFirst())
             {
-                db.execSQL("UPDATE student SET name='"+editQuantity.getText()+"',marks='"+editDescription.getText()+
-                        "' WHERE rollno='"+editName.getText()+"'");
+                db.execSQL("UPDATE workout SET quantity='"+editQuantity.getText()+"',description='"+editDescription.getText()+
+                        "' WHERE name='"+editName.getText()+"'");
                 showMessage("Success", "Record Modified");
             }
             else
             {
-                showMessage("Error", "Invalid Rollno");
+                showMessage("Error", "Invalid name");
             }
             clearText();
         }
@@ -99,10 +99,10 @@ public class MainActivity extends Activity implements OnClickListener
         {
             if(editName.getText().toString().trim().length()==0)
             {
-                showMessage("Error", "Please enter Rollno");
+                showMessage("Error", "Please enter name");
                 return;
             }
-            Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+editName.getText()+"'", null);
+            Cursor c=db.rawQuery("SELECT * FROM workout WHERE name='"+editName.getText()+"'", null);
             if(c.moveToFirst())
             {
                 editQuantity.setText(c.getString(1));
@@ -110,13 +110,13 @@ public class MainActivity extends Activity implements OnClickListener
             }
             else
             {
-                showMessage("Error", "Invalid Rollno");
+                showMessage("Error", "Invalid name");
                 clearText();
             }
         }
         if(view==btnViewAll)
         {
-            Cursor c=db.rawQuery("SELECT * FROM student", null);
+            Cursor c=db.rawQuery("SELECT * FROM workout", null);
             if(c.getCount()==0)
             {
                 showMessage("Error", "No records found");
@@ -125,15 +125,15 @@ public class MainActivity extends Activity implements OnClickListener
             StringBuffer buffer=new StringBuffer();
             while(c.moveToNext())
             {
-                buffer.append("Rollno: "+c.getString(0)+"\n");
-                buffer.append("Name: "+c.getString(1)+"\n");
-                buffer.append("Marks: "+c.getString(2)+"\n\n");
+                buffer.append("Name: "+c.getString(0)+"\n");
+                buffer.append("Quantity: "+c.getString(1)+"\n");
+                buffer.append("Description: "+c.getString(2)+"\n\n");
             }
-            showMessage("Student Details", buffer.toString());
+            showMessage("Workout Details", buffer.toString());
         }
         if(view==btnShowInfo)
         {
-            showMessage("Student Management Application", "Developed By Azim");
+            showMessage("Did You Work Out?", "Created by me");
         }
     }
     public void showMessage(String title,String message)
