@@ -13,8 +13,8 @@ import android.widget.EditText;
 
 public class MainActivity extends Activity implements OnClickListener
 {
-    EditText editName,editQuantity,editMarks;
-    Button btnAdd,btnDelete,btnModify,btnView,btnViewAll,btnShowInfo,btnStreak;
+    EditText editName,editQuantity,editDescription;
+    Button btnAdd,btnDelete,btnModify,btnView,btnViewAll,btnShowInfo;
     SQLiteDatabase db;
     /** Called when the activity is first created. */
     @Override
@@ -22,9 +22,9 @@ public class MainActivity extends Activity implements OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        editQuantity=(EditText)findViewById(R.id.editRollno);
-        editName=(EditText)findViewById(R.id.editName);
-        editMarks=(EditText)findViewById(R.id.editMarks);
+        editName=(EditText)findViewById(R.id.editRollno);
+        editQuantity=(EditText)findViewById(R.id.editName);
+        editDescription=(EditText)findViewById(R.id.editMarks);
         btnAdd=(Button)findViewById(R.id.btnAdd);
         btnDelete=(Button)findViewById(R.id.btnDelete);
         btnModify=(Button)findViewById(R.id.btnModify);
@@ -37,56 +37,57 @@ public class MainActivity extends Activity implements OnClickListener
         btnView.setOnClickListener(this);
         btnViewAll.setOnClickListener(this);
         btnShowInfo.setOnClickListener(this);
-        btnStreak.setOnClickListener(this);
         db=openOrCreateDatabase("StudentDB", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS workout(rollno VARCHAR,name VARCHAR,marks VARCHAR);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS student(rollno VARCHAR,name VARCHAR,marks VARCHAR);");
     }
     public void onClick(View view)
     {
         if(view==btnAdd)
         {
-            if(editQuantity.getText().toString().trim().length()==0|| editName.getText().toString().trim().length()==0|| editMarks.getText().toString().trim().length()==0)
+            if(editName.getText().toString().trim().length()==0||
+                    editQuantity.getText().toString().trim().length()==0||
+                    editDescription.getText().toString().trim().length()==0)
             {
                 showMessage("Error", "Please enter all values");
                 return;
             }
-            db.execSQL("INSERT INTO workout VALUES('"+ editQuantity.getText()+"','"+editName.getText()+
-                    "','"+editMarks.getText()+"');");
-            showMessage("Success", "Excercise added");
+            db.execSQL("INSERT INTO student VALUES('"+editName.getText()+"','"+editQuantity.getText()+
+                    "','"+editDescription.getText()+"');");
+            showMessage("Success", "Record added");
             clearText();
         }
         if(view==btnDelete)
         {
-            if(editQuantity.getText().toString().trim().length()==0)
+            if(editName.getText().toString().trim().length()==0)
             {
-                showMessage("Error", "Please enter workout name");
+                showMessage("Error", "Please enter Rollno");
                 return;
             }
-            Cursor c=db.rawQuery("SELECT * FROM workout WHERE rollno='"+ editQuantity.getText()+"'", null);
+            Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+editName.getText()+"'", null);
             if(c.moveToFirst())
             {
-                db.execSQL("DELETE FROM workout WHERE rollno='"+ editQuantity.getText()+"'");
-                showMessage("Success", "Exercise Deleted");
+                db.execSQL("DELETE FROM student WHERE rollno='"+editName.getText()+"'");
+                showMessage("Success", "Record Deleted");
             }
             else
             {
-                showMessage("Error", "Invalid Name");
+                showMessage("Error", "Invalid Rollno");
             }
             clearText();
         }
         if(view==btnModify)
         {
-            if(editQuantity.getText().toString().trim().length()==0)
+            if(editName.getText().toString().trim().length()==0)
             {
-                showMessage("Error", "Please enter exercise name");
+                showMessage("Error", "Please enter Rollno");
                 return;
             }
-            Cursor c=db.rawQuery("SELECT * FROM workout WHERE rollno='"+editQuantity.getText()+"'", null);
+            Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+editName.getText()+"'", null);
             if(c.moveToFirst())
             {
-                db.execSQL("UPDATE workout SET name='"+editName.getText()+"',marks='"+editMarks.getText()+
-                        "' WHERE rollno='"+editQuantity.getText()+"'");
-                showMessage("Success", "Workout Modified");
+                db.execSQL("UPDATE student SET name='"+editQuantity.getText()+"',marks='"+editDescription.getText()+
+                        "' WHERE rollno='"+editName.getText()+"'");
+                showMessage("Success", "Record Modified");
             }
             else
             {
@@ -96,26 +97,26 @@ public class MainActivity extends Activity implements OnClickListener
         }
         if(view==btnView)
         {
-            if(editQuantity.getText().toString().trim().length()==0)
+            if(editName.getText().toString().trim().length()==0)
             {
-                showMessage("Error", "Please enter exercise name");
+                showMessage("Error", "Please enter Rollno");
                 return;
             }
-            Cursor c=db.rawQuery("SELECT * FROM workout WHERE rollno='"+editQuantity.getText()+"'", null);
+            Cursor c=db.rawQuery("SELECT * FROM student WHERE rollno='"+editName.getText()+"'", null);
             if(c.moveToFirst())
             {
-                editName.setText(c.getString(1));
-                editMarks.setText(c.getString(2));
+                editQuantity.setText(c.getString(1));
+                editDescription.setText(c.getString(2));
             }
             else
             {
-                showMessage("Error", "Invalid workout");
+                showMessage("Error", "Invalid Rollno");
                 clearText();
             }
         }
         if(view==btnViewAll)
         {
-            Cursor c=db.rawQuery("SELECT * FROM workout", null);
+            Cursor c=db.rawQuery("SELECT * FROM student", null);
             if(c.getCount()==0)
             {
                 showMessage("Error", "No records found");
@@ -124,18 +125,16 @@ public class MainActivity extends Activity implements OnClickListener
             StringBuffer buffer=new StringBuffer();
             while(c.moveToNext())
             {
-                buffer.append("Excercise Name: "+c.getString(0)+"\n");
-                buffer.append("Excercise Description: "+c.getString(1)+"\n");
-                buffer.append("Excercise Quantity: "+c.getString(2)+"\n\n");
+                buffer.append("Rollno: "+c.getString(0)+"\n");
+                buffer.append("Name: "+c.getString(1)+"\n");
+                buffer.append("Marks: "+c.getString(2)+"\n\n");
             }
-            showMessage("Excercise Details", buffer.toString());
+            showMessage("Student Details", buffer.toString());
         }
         if(view==btnShowInfo)
         {
-            showMessage("App", "data");
+            showMessage("Student Management Application", "Developed By Azim");
         }
-
-
     }
     public void showMessage(String title,String message)
     {
@@ -147,9 +146,9 @@ public class MainActivity extends Activity implements OnClickListener
     }
     public void clearText()
     {
-        editQuantity.setText("");
         editName.setText("");
-        editMarks.setText("");
-        editQuantity.requestFocus();
+        editQuantity.setText("");
+        editDescription.setText("");
+        editName.requestFocus();
     }
 }
