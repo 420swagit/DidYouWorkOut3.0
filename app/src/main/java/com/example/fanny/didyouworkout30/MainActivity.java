@@ -14,7 +14,7 @@ import android.widget.EditText;
 public class MainActivity extends Activity implements OnClickListener
 {
     EditText editName,editQuantity,editMarks;
-    Button btnAdd,btnDelete,btnModify,btnView,btnViewAll,btnShowInfo;
+    Button btnAdd,btnDelete,btnModify,btnView,btnViewAll,btnShowInfo,btnStreak;
     SQLiteDatabase db;
     /** Called when the activity is first created. */
     @Override
@@ -37,6 +37,7 @@ public class MainActivity extends Activity implements OnClickListener
         btnView.setOnClickListener(this);
         btnViewAll.setOnClickListener(this);
         btnShowInfo.setOnClickListener(this);
+        btnStreak.setOnClickListener(this);
         db=openOrCreateDatabase("StudentDB", Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS workout(rollno VARCHAR,name VARCHAR,marks VARCHAR);");
     }
@@ -65,7 +66,7 @@ public class MainActivity extends Activity implements OnClickListener
             if(c.moveToFirst())
             {
                 db.execSQL("DELETE FROM workout WHERE rollno='"+ editQuantity.getText()+"'");
-                showMessage("Success", "Excercise Deleted");
+                showMessage("Success", "Exercise Deleted");
             }
             else
             {
@@ -133,6 +134,8 @@ public class MainActivity extends Activity implements OnClickListener
         {
             showMessage("App", "data");
         }
+
+
     }
     public void showMessage(String title,String message)
     {
